@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <cs50.h>
+#include <ctype.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+bool isNumericString(string stringK) {
+    for (int i = 0; i < strlen(stringK); i++) {
+        if (stringK[i] < '0' || stringK[i] > '9')
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+char changeChar(char c, int K)
+{
+    if (c >= 'a' && c <= 'z')
+    {
+        return (c - 'a' + K) % 26 + 'a';
+    }
+    else if (c >= 'A' && c <= 'Z')
+    {
+        return (c - 'A' + K) % 26 + 'A';
+    }
+    else
+    {
+        return c;
+    }
+}
+
+
+void encryptString(string ptext, int K)
+{
+    for (int i = 0; i < strlen(ptext); i++)
+    {
+        ptext[i] = changeChar(ptext[i], K);
+    }
+}
+
+int main(int argc, string argv[])
+{
+    if (argc != 2)
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+    string kstr = argv[1];
+    if (!isNumericString(kstr))
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+    int k = atoi(kstr);
+    string plaintext = get_string("plaintext: ");
+    encryptString(plaintext, k);
+    printf("ciphertext: %s\n", plaintext);
+
+}

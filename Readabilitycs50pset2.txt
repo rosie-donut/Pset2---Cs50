@@ -1,0 +1,97 @@
+#include <cs50.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+
+// function for Coleman-Liau
+float ColemanLiau(float Letters, float Words, float Sentences)
+{
+    float L = Letters / Words * 100;
+    float S = Sentences / Words * 100;
+    float index = 0.0588 * L - 0.296 * S - 15.8;
+    return index;
+}
+
+int countLetters(string text)
+{
+    int letters = 0;
+    int n = strlen(text);
+    for (int i = 0; i < n; i++)
+    {
+        if (text[i] >= 'a' && text[i] <= 'z')
+        {
+            letters++;
+        }
+        if (text[i] >= 'A' && text[i] <= 'Z')
+        {
+            letters++;
+        }
+
+    }
+    return letters;
+}
+
+int countWords(string text)
+{
+    int wordCount = 0;
+    int n = strlen(text);
+    if (n == 0)
+    {
+        return 0;
+    }
+    for (int i = 1; i < n; i++)
+    {
+        if (!isspace(text[i - 1]) && isspace(text[i]))
+        {
+            wordCount++;
+        }
+    }
+    if (!isspace(text[n - 1]))
+    {
+        wordCount++;
+    }
+    return wordCount;
+}
+
+int countSentences(string text)
+{
+    int sentences = 0;
+    int n = strlen(text);
+    for (int i = 0; i < n; i++)
+    {
+        if (text[i] == '.' || text[i] == '!' || text[i] == '?')
+        {
+            sentences++;
+        }
+    }
+    return sentences;
+}
+
+int main(void)
+{
+    // Prompt user for text
+    string text = get_string("Text: ");
+
+    // call functions here
+    int letters = countLetters(text);
+    int words = countWords(text);
+    int sentences = countSentences(text);
+
+    // calculate Coleman-Liau
+    float gradeLevel = ColemanLiau(letters, words, sentences);
+    int roundedGrade = (int) round(gradeLevel);
+    if (roundedGrade <= 0)
+    {
+        printf("Before Grade 1\n");
+    }
+    else if (roundedGrade >= 16)
+    {
+        printf("Grade 16+\n");
+    }
+    else if (roundedGrade > 0 && roundedGrade < 16)
+    {
+        printf("Grade %i\n", roundedGrade);
+    }
+
+}
